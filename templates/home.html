@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container overlay">
+    {% if user.is_authenticated %}
+    <div class="user-info">
+
+        <div class="badge bg-light text-dark position-absolute" style="top: 0.5rem; left: 50%; transform: translateX(-50%);">
+    <h5>{% load static %}
+                    <img src="{% static 'nielit_logo.png' %}" alt="Nielit Logo" width="100">
+                    Welcome, {{ user.first_name }}!
+                    </h5>
+</div>
+<br>
+<br>
+<br><a href="{% url 'logout' %}" class="btn btn-danger">Log Out</a>
+        <a href="{% url 'password_change' %}" class="btn btn-primary">Change Password</a>
+    </div>
+    <div class="certificate-portal">
+       <center> <h3 class="title">
+        NIELIT Certificates Portal</h3></center>
+        <!-- Student Table -->
+        <div class="table-responsive">
+            <table class="table table-hover table-dark table-transparent">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Father's Name</th>
+                        <th>Email</th>
+                        <th>Roll No.</th>
+                        <th>Course Code</th>
+                        <th>Course Enrolled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.father_name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.roll_number }}</td>
+                        <td>
+                            {% for course in student.courses.all %}
+                            {{ course.course_code }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for course in student.courses.all %}
+                            {{ course.course_name }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Certificate Table -->
+        <div class="table-responsive">
+            <table class="table table-hover table-dark table-transparent">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Certificates No.</th>
+                        <th>QR Code</th>
+                        <th>Certificates</th>
+                    </tr>
+                </thead>
+                <tbody>
+    {% for student_data in students_data %}
+    <tr>
+        <td><b>{{ student_data.student.name }}</b></td>
+        <td><center><h1 style="color:white";>{{ student_data.student.certificatesmaster_set.count }}</h1></center></td>
+        <td>
+            {% for qr_code_url in student_data.qr_code_urls %}
+    <center>
+        <br>
+        <img src="{{ qr_code_url }}" alt="QR Code for Certificate" style="width: 100px; height: 100px;"><br><br>
+
+        <a href="{{ qr_code_url }}" class="btn btn-light btn-xs" download="{{ qr_code_url }}" target="_blank">Download QR</a><br>
+    </center>
+{% endfor %}
+
+        </td>
+        <td>
+            {% for certificate in student_data.student.certificatesmaster_set.all %}
+            <div class="certificate-item">
+                <b class="serial-number">{{ forloop.counter }}</b>.
+                <b>{{ certificate.certificate_name }}</b><br>
+                <a href="{{ certificate.certificate.url }}" class="btn btn-light btn-xs" download="{{ certificate.certificate.url }}" target="_blank">Download</a>
+                <a href="{{ certificate.certificate.url }}" class="btn btn-dark btn" target="_blank">View</a> <br>
+                {% if certificate.tid %}
+                <br><a href="https://sepolia.etherscan.io/tx/{{ certificate.tid }}" class="btn btn-primary btn-xs" target="_blank">Verify on Blockchain</a><br>
+                {% else %}
+                <p style="color:red;">Not Written on Blockchain yet please wait</p>
+                {% endif %}
+            </div>
+            {% empty %}
+            No certificates available
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+            </table>
+        </div>
+    </div>
+    <!-- Footer Section -->
+    <footer class="py-5">
+    <div class="container bg-dark-transparent">
+            <!-- Youtube Badge -->
+            <div class="badge bg-light text-white position-absolute" style="top: 0.5rem; left: 0.5rem">
+                <a href="https://youtube.com/@RPR.NIELIT" target="_blank" class="logout-link">Youtube Channel</a>
+            </div>
+            <!-- Nielit badge-->
+            <div class="badge bg-light text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                <a href="https://www.nielit.gov.in/chandigarh/index.php" target="_blank" class="admin-link">NIELIT Chandigarh</a>
+            </div>
+
+            <div class="social-icons">
+                <!-- URLs of social media profiles -->
+                <a href="https://www.facebook.com/RPR.NIELIT" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://twitter.com/chd_nielit" target="_blank"><i class="bi bi-twitter"></i></a>
+                <a href="https://instagram.com/nielitchandigarh" target="_blank"><i class="bi bi-instagram"></i></a>
+            </div>
+             <p class="m-0 text-center text-white">
+            Copyright &copy; NIELIT Chandigarh 2023 made with &#128151;
+            <br>
+            <a href="{% url 'privacy_policy' %}" class="privacy-link">Privacy Policy</a>
+        </p>
+            <!-- Contact Us -->
+            <center>
+                <p class="btn btn-info m-0 text-center text-white"><b><a href="mailto:nielitcertificates@gmail.com">Contact Us</a></b></p>
+            </center>
+        </div>
+    </footer>
+    {% else %}
+    <p>You are not logged in.</p>
+    <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
+    {% endif %}
+</div>
+{% endblock %}

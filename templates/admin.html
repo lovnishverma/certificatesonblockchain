@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Certificates on Blockchain{% endblock %}
+
+{% block content %}
+<br>
+<center>
+    <br><a href="{% url 'logout' %}" class="btn btn-danger">Log Out</a>
+        <a href="{% url 'password_change' %}" class="btn btn-primary">Change Password</a>
+        <a href="/admin" class="btn btn-primary">Admin Panel</a> </center>
+<div class="container">
+  <h1>Certificates on Blockchain</h1>
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th>Certificate No.</th>
+        <th>Certificate Name</th>
+        <th>Course Code</th>
+        <th>Course Name</th>
+        <th>Roll No.</th>
+        <th>Student Name</th>
+        <th>Hash</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for certificate in certificates %}
+      <tr>
+  <td class="certificate-id">{{ certificate.id }}</td>
+  <td class="certificate-name">{{ certificate.certificate_name }}</td>
+  <td>
+    {% for course in certificate.student.courses.all %}
+    <span class="course-code">{{ course.course_code }}</span><br>
+    {% endfor %}
+  </td>
+  <td>
+    {% for course in certificate.student.courses.all %}
+    <span class="course-name">{{ course.course_name }}</span><br>
+    {% endfor %}
+  </td>
+  <td class="roll-number">{{ certificate.student.roll_number }}</td>
+  <td class="student-name">{{ certificate.student.name }}</td>
+  <td class="hash">{{ certificate.chash }}</td>
+  <td>
+      {% if certificate.tid %}
+            <!-- Display this if it's not null -->
+            <a href="https://sepolia.etherscan.io/tx/{{ certificate.tid }}" class="btn btn-primary btn-xs"  target="_blank">View Transaction on Blockchain</a>
+
+          {% else %}
+    <button class="btn btn-success write-blockchain-btn"
+            data-certificate-id="{{ certificate.id }}"
+            data-certificate-name="{{ certificate.certificate_name }}"
+            data-course-code="{{ certificate.student.courses.course_code }}"
+            data-course-name="{{ certificate.student.courses.course_name }}"
+            data-roll-number="{{ certificate.student.roll_number }}"
+            data-student-name="{{ certificate.student.name }}"
+            data-hash="{{ certificate.chash }}">
+      Write to Blockchain
+    </button><br>
+     <p style="color:red;" id="blockhash"></p>
+  <p style="color:red;" id="blockNumber"></p>
+  <div class="loading-message" style="display: none;">
+    <p style="color:red;">Please wait, data is being written on the blockchain...</p>
+  </div>
+     {% endif %}
+  </td>
+</tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script>
+  var contract;
+  var address = "0x563b0280198cDD34c6aE518Fbb4ac31Fc5C94531";
+  var abi = [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "certificateId",
+          "type": "string"
+        },
+        {
+          "name": "certificateName",
+          "type": "string"
+        },
+        {
+          "name": "courseCode",
+          "type": "string"
+        },
+        {
+          "name": "courseName",
+          "type": "string"
+        },
+        {
+          "name": "rollNumber",
+          "type": "string"
+        },
+        {
+          "name": "studentName",
+          "type": "string"
+        },
+        {
+          "name": "hash",
+          "type": "string"
+        }
+      ],
+      "name": "setCD",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ];
+
+  $(document).ready(function () {
+    web3 = new Web3(web3.currentProvider);
+    window.web3.currentProvider.enable();
+    contract = new web3.eth.Contract(abi, address);
+
+    // Attach the writeToBlockchain function to the button click event for each row
+    $('.write-blockchain-btn').click(function () {
+      var $row = $(this).closest('tr');
+      var certificateId = $row.find('.certificate-id').text();
+      var certificateName = $row.find('.certificate-name').text();
+      var courseCode = $row.find('.course-code').text();
+      var courseName = $row.find('.course-name').text();
+      var rollNumber = $row.find('.roll-number').text();
+      var studentName = $row.find('.student-name').text();
+      var hash = $row.find('.hash').text();
+
+      writeToBlockchain(certificateId, certificateName, courseCode, courseName, rollNumber, studentName, hash);
+    });
+  });
+
+  function writeToBlockchain(certificateId, certificateName, courseCode, courseName, rollNumber, studentName, hash) {
+    // Display loading message
+    $('.loading-message').show();
+
+    // Disable the button
+    $('.write-blockchain-btn').attr('disabled', true);
+
+    // Write the data to the blockchain using Web3.js
+    web3.eth.getAccounts().then(function (accounts) {
+      var acc = accounts[0];
+      return contract.methods.setCD(certificateId, certificateName, courseCode, courseName, rollNumber, studentName, hash).send({ from: acc });
+    }).then(function (tx) {
+      console.log(tx);
+      $('#blockhash').html('Block Tx Hash : ' + tx.transactionHash);
+      $('#blockNumber').html('Block Tx Number : ' + tx.blockNumber);
+
+      // Redirect to another page after transaction
+      console.log("Redirecting to /save_transaction/" + certificateId + "/" + tx.transactionHash);
+location.replace("/save_transaction/" + certificateId + "/" + tx.transactionHash);
+
+    }).catch(function (error) {
+      console.error(error);
+    }).finally(function () {
+      // Hide loading message and enable the button
+      $('.loading-message').hide();
+      $('.write-blockchain-btn').attr('disabled', false);
+    });
+  }
+</script>
+
+{% endblock %}

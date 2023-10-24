@@ -1,0 +1,158 @@
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .container {
+        margin-top: 10px; /* Adjust margin for smaller screens */
+    }
+
+    /* Mobile-specific style adjustments */
+    .user-info {
+        font-size: 16px; /* Adjust font size for user info on mobile */
+    }
+
+    /* Add any other mobile-specific style adjustments here */
+}
+
+/* Tablet Styles (Example: Up to 992px) */
+@media (max-width: 992px) {
+    /* Tablet-specific style adjustments */
+    .table-responsive {
+        overflow-x: auto; /* Add horizontal scroll for tables on tablets if needed */
+    }
+
+    /* Add tablet-specific style adjustments here */
+}
+
+/* Additional Media Queries for Larger Screens or Specific Elements */
+@media (min-width: 1200px) {
+    /* Styles for screens larger than 1200px wide */
+    .certificate-item {
+        margin: 10px; /* Adjust spacing for certificate items on larger screens */
+    }
+
+    /* Add more styles for larger screens as needed */
+}
+
+body {
+    background-image: url('../nielit_bg.jpg');
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    color: white;
+}
+
+.title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 25px;
+    color: #fff;
+    background: linear-gradient(45deg, rgba(173, 216, 230, 0.2), #f3f315);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 6px;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.8); /* Adjust the alpha value for transparency */
+    position: justify;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.light-dark-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.user-info {
+    background-color: rgba(173, 216, 230, 0.2);
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.user-info a {
+    margin: 5px;
+    color: #fff;
+}
+
+.certificate-portal h1 {
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    background-color: #fff;
+}
+
+table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+table.table-transparent {
+    background-color: transparent;
+}
+
+table.table-transparent th,
+table.table-transparent td {
+    background-color: transparent;
+    border: 0.1px solid #D3D3D3;
+    border-collapse: collapse;
+    padding: 8px;
+}
+
+.btn {
+    margin-right: 10px;
+}
+
+.bg-dark-transparent {
+    background-color: rgba(173, 216, 230, 0.2);
+    padding: 15px;
+}
+
+footer {
+    position: relative;
+  }
+
+  footer .social-icons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  footer .social-icons a {
+    color: #fff;
+    margin: 0 10px;
+    font-size: 24px;
+    transition: color 0.3s ease;
+  }
+
+  footer .social-icons a:hover {
+    color: #00f;
+  }

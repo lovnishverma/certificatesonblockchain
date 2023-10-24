@@ -1,0 +1,82 @@
+<!-- registration/registration.html -->
+{% extends 'base.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6"> <!-- Increase the column size for larger screens -->
+      <div class="light-dark-container">
+        <div class="text-center mb-4">
+          {% load static %}
+          <img src="{% static 'nielit_logo.png' %}" alt="Nielit Logo" width="100">
+          <h1>Registration</h1>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          
+          <!-- Email address -->
+          <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }} <!-- Display email validation errors -->
+          </div>
+
+          <!-- First name -->
+          <div class="form-group">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.first_name.errors }} <!-- Display first name validation errors -->
+          </div>
+
+          <!-- Last name -->
+          <div class="form-group">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.last_name.errors }} <!-- Display last name validation errors -->
+          </div>
+
+          <!-- Username -->
+          <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }} <!-- Display username validation errors -->
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {{ form.password1.errors }} <!-- Display password validation errors -->
+          </div>
+
+          <!-- Password confirmation -->
+          <div class="form-group">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {{ form.password2.errors }} <!-- Display password confirmation validation errors -->
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          <b>Already have an account? <a href="{% url 'login' %}">Login Now</a></b>
+        </div>
+      </div>
+      <!-- Display error messages -->
+      {% if messages %}
+      <div class="alert alert-danger mt-3">
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
