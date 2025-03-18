@@ -7,7 +7,7 @@ The **Certificates on Blockchain** project provides a decentralized, immutable, 
 This project is open-source under the **MIT License**.
 
 ## Research Paper
-This project is based on the research paper **[Blockchain-Based Certificate Verification System: A Decentralized Approach](https://link.springer.com/chapter/10.1007/978-981-97-3601-0_367)**, which explores how blockchain can be utilized for secure and transparent certificate verification.
+This project is based on the research paper **[Blockchain-Based Certificate Verification System: A Decentralized Approach](https://www.researchgate.net/publication/382711501_Blockchain-Based_Certificate_Verification_System_A_Decentralized_Approach)**, which explores how blockchain can be utilized for secure and transparent certificate verification.
 
 ## Features
 - **Decentralized Verification**: Uses blockchain to store and verify certificates.
