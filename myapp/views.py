@@ -10,7 +10,6 @@ from io import BytesIO
 from base64 import b64encode
 
 
-
 @login_required
 def home(request):
     if request.user.username == 'admin':
@@ -30,7 +29,8 @@ def home(request):
 
             for certificate in student_certificates:
                 # Build the certificate URL using request.build_absolute_uri
-                certificate_url = request.build_absolute_uri(certificate.certificate.url)
+                certificate_url = request.build_absolute_uri(
+                    certificate.certificate.url)
 
                 # Create a QR code for the certificate URL
                 qr = qrcode.QRCode(
@@ -44,7 +44,8 @@ def home(request):
 
                 # Create an in-memory binary stream to store the image
                 stream = BytesIO()
-                qr.make_image(fill_color="black", back_color="white").save(stream, format="PNG")
+                qr.make_image(fill_color="black", back_color="white").save(
+                    stream, format="PNG")
 
                 # Encode the binary image data as base64
                 image_base64 = b64encode(stream.getvalue()).decode("utf-8")
@@ -61,7 +62,6 @@ def home(request):
             })
 
         return render(request, 'home.html', {'students': students, 'students_data': student_data})
-
 
 
 def registration(request):
@@ -84,6 +84,7 @@ def registration(request):
         form = RegistrationForm()
     return render(request, 'registration/registration.html', {'form': form})
 
+
 def privacy_policy(request):
     # You can add any context data you want to pass to the template here
     context = {
@@ -94,6 +95,7 @@ def privacy_policy(request):
 
     # Render the Privacy Policy template with the context data
     return render(request, 'privacy_policy.html', context)
+
 
 def save_transaction(request, certificate_id, transaction_hash):
     try:
@@ -114,5 +116,3 @@ def save_transaction(request, certificate_id, transaction_hash):
     except Exception as e:
         # Handle other exceptions
         return render(request, 'error.html', {'error_message': str(e)})
-
-
